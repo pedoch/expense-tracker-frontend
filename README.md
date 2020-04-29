@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and was developed by [StriTech](https://pedoch101.000webhostapp.com/)
 
-## Expense Tracker
+## [Expense Tracker](https://expense-trackometer.netlify.app)
 
 This is a simple application made for public use.
 It enables users input their transactions and track expenses made.
