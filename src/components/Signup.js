@@ -78,8 +78,8 @@ export default function Signup() {
 				password: signupInfo.password,
 			})
 			.then((result) => {
-				window.location.replace('/login');
-				// return <Redirect to='/login' />;
+				// window.location.replace('/login');
+				return <Redirect to='/login' />;
 			})
 			.catch((err) => console.log(err));
 	};

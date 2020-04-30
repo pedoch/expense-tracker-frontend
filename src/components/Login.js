@@ -84,8 +84,8 @@ export default function Login() {
 				}
 
 				// handleRedirect('/');
-				window.location.replace('/');
-				// return <Redirect to='/' />;
+				// window.location.replace('/');
+				return <Redirect to='/' />;
 			})
 			.catch((err) => console.log(err));
 	};
