@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { required, length, email } from '../util/validators';
 import axios from 'axios';
 
@@ -79,6 +79,7 @@ export default function Signup() {
 			})
 			.then((result) => {
 				window.location.replace('/login');
+				// return <Redirect to='/login' />;
 			})
 			.catch((err) => console.log(err));
 	};
@@ -131,7 +132,7 @@ export default function Signup() {
 			</form>
 			<hr></hr>
 			<p>
-				Have an account? &nbsp;&nbsp;<a href='/login'>Login</a>
+				Have an account? &nbsp;&nbsp;<Link to='/login'>Login</Link>
 			</p>
 		</div>
 	);

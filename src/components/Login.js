@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { length, email } from '../util/validators';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalState';
 import axios from 'axios';
 // import axios from 'axios';
@@ -85,6 +85,7 @@ export default function Login() {
 
 				// handleRedirect('/');
 				window.location.replace('/');
+				// return <Redirect to='/' />;
 			})
 			.catch((err) => console.log(err));
 	};
@@ -135,7 +136,7 @@ export default function Login() {
 			</form>
 			<hr />
 			<p>
-				Don't have an account? &nbsp;&nbsp;<a href='/signup'>Signup</a>
+				Don't have an account? &nbsp;&nbsp;<Link to='/signup'>Signup</Link>
 			</p>
 		</div>
 	);
