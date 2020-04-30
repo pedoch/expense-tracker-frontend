@@ -135,15 +135,7 @@ export default function Login() {
 			</form>
 			<hr />
 			<p>
-				Don't have an account? &nbsp;&nbsp;
-				<button
-					className='btn'
-					onClick={() => {
-						window.location.replace('/signup');
-					}}
-				>
-					Signup
-				</button>
+				Don't have an account? &nbsp;&nbsp;<a href='/signup'>Signup</a>
 			</p>
 		</div>
 	);
