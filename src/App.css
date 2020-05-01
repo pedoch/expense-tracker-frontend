@@ -8,6 +8,18 @@
 	box-sizing: border-box;
 }
 
+html ::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	border-radius: 5px;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background-color: #9c88ff;
+}
+
 body {
 	background-color: #f7f7f7;
 	display: flex;
@@ -124,7 +136,8 @@ input[type='password'] {
 	box-shadow: var(--box-shadow);
 	color: #fff;
 	border: 0;
-	display: block;
+	display: flex;
+	justify-content: center;
 	font-size: 16px;
 	margin: 10px 0 30px;
 	padding: 10px;
@@ -140,6 +153,8 @@ input[type='password'] {
 	list-style-type: none;
 	padding: 0;
 	margin-bottom: 40px;
+	overflow-y: auto;
+	overflow-x: clip;
 }
 
 .list li {
@@ -150,7 +165,9 @@ input[type='password'] {
 	justify-content: space-between;
 	position: relative;
 	padding: 10px;
+	padding-left: 5px;
 	margin: 10px 0;
+	margin-right: 2px;
 }
 
 .list li.plus {
@@ -169,10 +186,11 @@ input[type='password'] {
 	font-size: 20px;
 	line-height: 20px;
 	padding: 2px 5px;
-	position: absolute;
-	top: 50%;
-	left: 0;
-	transform: translate(-100%, -50%);
+	margin-right: 5px;
+	/* position: absolute; */
+	/* top: 50%; */
+	/* left: 0; */
+	/* transform: translate(-100%, -50%); */
 	opacity: 0;
 	transition: opacity 0.3s ease;
 }

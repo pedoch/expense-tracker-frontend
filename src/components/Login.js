@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { length, email } from '../util/validators';
 import { Redirect, Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalState';
+import { Spinner, toaster } from 'evergreen-ui';
 import axios from 'axios';
 // import axios from 'axios';
 
@@ -22,6 +23,9 @@ export default function Login() {
 			message: '',
 		},
 	});
+
+	const [redirect, setRedirect] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const { setUser } = useContext(GlobalContext);
 
@@ -48,8 +52,10 @@ export default function Login() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setLoading(true);
 		let check = email(loginInfo.email);
-		if (!check.isValid)
+		if (!check.isValid) {
+			setLoading(false);
 			return setValidation({
 				...validation,
 				email: {
@@ -57,8 +63,10 @@ export default function Login() {
 					message: 'Please enter valid email',
 				},
 			});
+		}
 		check = length({ min: 6 }, loginInfo.password);
-		if (!check.isValid)
+		if (!check.isValid) {
+			setLoading(false);
 			return setValidation({
 				...validation,
 				password: {
@@ -66,6 +74,7 @@ export default function Login() {
 					message: 'Password should be atleast 6 characters long',
 				},
 			});
+		}
 
 		axios
 			.post('https://expense-tracker-deltanboi.herokuapp.com/auth/login', {
@@ -83,15 +92,36 @@ export default function Login() {
 					sessionStorage.setItem('user', JSON.stringify(result.data.user));
 				}
 
-				// handleRedirect('/');
-				// window.location.replace('/');
-				return <Redirect to='/' />;
+				toaster.success('Login successful');
+
+				setRedirect(true);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				if (!err.response) {
+					toaster.danger('Login failed', {
+						description: 'May be a network error',
+					});
+				} else {
+					if (err.response.status === 401) {
+						toaster.danger('Login failed', {
+							description: 'Incorrect email/password',
+						});
+					}
+					if (err.response.status === 500) {
+						toaster.danger('Login failed', {
+							description: 'May be a problem with our server',
+						});
+					}
+				}
+
+				setLoading(false);
+			});
 	};
 
 	if (localStorage.getItem('token') || sessionStorage.getItem('token'))
 		return <Redirect to='/' />;
+
+	if (redirect) return <Redirect to='/' />;
 
 	return (
 		<div>
@@ -130,8 +160,8 @@ export default function Login() {
 					/>
 					<span>Remember me</span>
 				</div>
-				<button type='submit' className='btn'>
-					Login
+				<button type='submit' className='btn' disabled={loading}>
+					{loading ? <Spinner size={16} /> : 'Login'}
 				</button>
 			</form>
 			<hr />

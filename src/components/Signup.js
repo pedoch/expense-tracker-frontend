@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { required, length, email } from '../util/validators';
+import { Spinner, toaster } from 'evergreen-ui';
 import axios from 'axios';
 
 export default function Signup() {
@@ -25,6 +26,10 @@ export default function Signup() {
 		},
 	});
 
+	const [redirect, setRedirect] = useState(false);
+
+	const [loading, setLoading] = useState(false);
+
 	const handleInput = (e, key) => {
 		setSignupInfo({
 			...signupInfo,
@@ -44,8 +49,10 @@ export default function Signup() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setLoading(true);
 		let check = required(signupInfo.name);
-		if (!check.isValid)
+		if (!check.isValid) {
+			setLoading(false);
 			return setValidation({
 				...validation,
 				name: {
@@ -53,8 +60,10 @@ export default function Signup() {
 					message: 'Please enter your name',
 				},
 			});
+		}
 		check = email(signupInfo.email);
-		if (!check.isValid)
+		if (!check.isValid) {
+			setLoading(false);
 			return setValidation({
 				...validation,
 				email: {
@@ -62,8 +71,10 @@ export default function Signup() {
 					message: 'Please enter valid email',
 				},
 			});
+		}
 		check = length({ min: 6 }, signupInfo.password);
-		if (!check.isValid)
+		if (!check.isValid) {
+			setLoading(false);
 			return setValidation({
 				...validation,
 				password: {
@@ -71,6 +82,7 @@ export default function Signup() {
 					message: 'Password should be atleast 6 characters long',
 				},
 			});
+		}
 		axios
 			.put('https://expense-tracker-deltanboi.herokuapp.com/auth/signup', {
 				name: signupInfo.name,
@@ -78,14 +90,35 @@ export default function Signup() {
 				password: signupInfo.password,
 			})
 			.then((result) => {
-				// window.location.replace('/login');
-				return <Redirect to='/login' />;
+				toaster.success('Signup successful');
+				setRedirect(true);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				if (!err.response) {
+					toaster.danger('Login failed', {
+						description: 'May be a network error',
+					});
+				} else {
+					if (err.response.status === 422) {
+						toaster.danger('Signup failed', {
+							description: 'User already exists',
+						});
+					}
+					if (err.response.status === 500) {
+						toaster.danger('Signup failed', {
+							description: 'May be a problem with our server',
+						});
+					}
+				}
+
+				setLoading(false);
+			});
 	};
 
 	if (localStorage.getItem('token') || sessionStorage.getItem('token'))
 		return <Redirect to='/' />;
+
+	if (redirect) return <Redirect to='/login' />;
 
 	return (
 		<div>
@@ -127,7 +160,7 @@ export default function Signup() {
 					{!validation.password.isValid && <p>{validation.password.message}</p>}
 				</div>
 				<button type='submit' className='btn'>
-					Signup
+					{loading ? <Spinner size={16} /> : 'Signup'}
 				</button>
 			</form>
 			<hr></hr>
