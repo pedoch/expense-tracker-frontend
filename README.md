@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and was developed by [StriTech](https://pedoch101.000webhostapp.com/)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and was developed by [StriTech](https://stritech.netlify.com/)
 
 ## [Expense Tracker](https://expense-trackometer.netlify.app)
 
